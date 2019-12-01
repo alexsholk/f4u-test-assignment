@@ -6,13 +6,17 @@ namespace App\Shipping\Domain\Model\Client;
 
 class Client
 {
+    const SHIPPING_ADDRESS_LIST_MAX_COUNT = 3;
+
     private $clientId;
     private $fullName;
+    private $shippingAddressList;
 
-    private function __construct(ClientId $clientId, FullName $fullName)
+    private function __construct(ClientId $clientId, FullName $fullName, ShippingAddressList $shippingAddressList = null)
     {
-        $this->clientId = $clientId;
-        $this->fullName = $fullName;
+        $this->clientId            = $clientId;
+        $this->fullName            = $fullName;
+        $this->shippingAddressList = $shippingAddressList ?: ShippingAddressList::create(self::SHIPPING_ADDRESS_LIST_MAX_COUNT);
     }
 
     private function __clone()
@@ -30,8 +34,13 @@ class Client
         return $this->fullName;
     }
 
-    public static function create(ClientId $clientId, FullName $fullName): self
+    public function shippingAddressList(): ShippingAddressList
     {
-        return new self($clientId, $fullName);
+        return $this->shippingAddressList;
+    }
+
+    public static function create(ClientId $clientId, FullName $fullName, ShippingAddressList $shippingAddressList = null): self
+    {
+        return new self($clientId, $fullName, $shippingAddressList);
     }
 }
