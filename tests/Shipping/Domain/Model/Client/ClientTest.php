@@ -14,7 +14,7 @@ class ClientTest extends TestCase
     /**
      * @test
      */
-    public function createWithoutShippingAddressList()
+    public function create()
     {
         $client = Client::create(
             ClientId::create(md5('id')),
@@ -22,5 +22,6 @@ class ClientTest extends TestCase
         );
 
         $this->assertInstanceOf(ShippingAddressList::class, $client->shippingAddressList());
+        $this->assertCount(0, $client->shippingAddressList()->all());
     }
 }

@@ -12,11 +12,11 @@ class Client
     private $fullName;
     private $shippingAddressList;
 
-    private function __construct(ClientId $clientId, FullName $fullName, ShippingAddressList $shippingAddressList = null)
+    private function __construct(ClientId $clientId, FullName $fullName)
     {
         $this->clientId            = $clientId;
         $this->fullName            = $fullName;
-        $this->shippingAddressList = $shippingAddressList ?: ShippingAddressList::create(self::SHIPPING_ADDRESS_LIST_MAX_COUNT);
+        $this->shippingAddressList = ShippingAddressList::create(self::SHIPPING_ADDRESS_LIST_MAX_COUNT);
     }
 
     private function __clone()
@@ -39,8 +39,8 @@ class Client
         return $this->shippingAddressList;
     }
 
-    public static function create(ClientId $clientId, FullName $fullName, ShippingAddressList $shippingAddressList = null): self
+    public static function create(ClientId $clientId, FullName $fullName): self
     {
-        return new self($clientId, $fullName, $shippingAddressList);
+        return new self($clientId, $fullName);
     }
 }
