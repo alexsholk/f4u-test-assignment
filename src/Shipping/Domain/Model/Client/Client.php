@@ -4,7 +4,7 @@
 namespace App\Shipping\Domain\Model\Client;
 
 
-class Client
+class Client implements \JsonSerializable
 {
     const SHIPPING_ADDRESS_LIST_MAX_COUNT = 3;
 
@@ -47,6 +47,25 @@ class Client
     public function shippingAddressList(): ShippingAddressList
     {
         return $this->shippingAddressList;
+    }
+
+    public function jsonSerialize()
+    {
+        $clientData = [
+            'client_id'  => $this->clientId()->id(),
+            'first_name' => $this->fullName()->firstName(),
+            'last_name'  => $this->fullName()->lastName(),
+        ];
+
+        $shippingAddressData = [];
+        foreach ($this->shippingAddressList->all() as $shippingAddress) {
+            $item            = $shippingAddress->jsonSerialize();
+            $item['default'] = $shippingAddress->equals($this->shippingAddressList->default());
+            $shippingAddressData[] = $item;
+        }
+        $clientData['shipping_address_list'] = $shippingAddressData;
+
+        return $clientData;
     }
 
     public static function create(ClientId $clientId, FullName $fullName): self

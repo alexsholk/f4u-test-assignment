@@ -4,7 +4,7 @@
 namespace App\Shipping\Domain\Model\ShippingAddress;
 
 
-class ShippingAddress
+class ShippingAddress implements \JsonSerializable
 {
     private $country;
     private $city;
@@ -45,6 +45,16 @@ class ShippingAddress
             && $this->city()->equals($shippingAddress->city())
             && $this->zipcode()->equals($shippingAddress->zipcode())
             && $this->street()->equals($shippingAddress->street());
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'country' => $this->country()->name(),
+            'city'    => $this->city()->name(),
+            'zipcode' => $this->zipcode()->value(),
+            'street'  => $this->street()->name(),
+        ];
     }
 
     public static function create(Country $country, City $city, Zipcode $zipcode, Street $street): self

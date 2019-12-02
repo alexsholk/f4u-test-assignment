@@ -4,7 +4,7 @@
 namespace App\Shipping\Domain\Model\Client;
 
 
-class ClientId
+class ClientId implements \JsonSerializable
 {
     const ID_MIN_LENGTH = 16;
     const ID_MAX_LENGTH = 80;
@@ -40,6 +40,16 @@ class ClientId
     public function id(): string
     {
         return $this->id;
+    }
+
+    public function __toString()
+    {
+        return $this->id();
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->id();
     }
 
     public static function create(string $id): self
