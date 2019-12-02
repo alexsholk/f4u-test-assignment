@@ -27,11 +27,13 @@ class ClientService
 
     /**
      * @param ClientDTO $clientDTO
+     * @return ClientId
      */
-    public function createClient(ClientDTO $clientDTO)
+    public function createClient(ClientDTO $clientDTO): ClientId
     {
         $client = $this->convertClientDTOtoClient($clientDTO);
         $this->saveClient($client);
+        return $client->clientId();
     }
 
     /**
@@ -60,7 +62,7 @@ class ClientService
      */
     public function addShippingAddress(ClientId $clientId, ShippingAddressDTO $shippingAddressDTO)
     {
-        $client          = $this->findClient($clientId);
+        $client = $this->findClient($clientId);
         $shippingAddress = $this->convertShippingAddressDTOtoShippingAddress($shippingAddressDTO);
 
         if (!$client->shippingAddressList()->exists($shippingAddress)) {
@@ -80,7 +82,7 @@ class ClientService
      */
     public function removeShippingAddress(ClientId $clientId, ShippingAddressDTO $shippingAddressDTO)
     {
-        $client          = $this->findClient($clientId);
+        $client = $this->findClient($clientId);
         $shippingAddress = $this->convertShippingAddressDTOtoShippingAddress($shippingAddressDTO);
 
         $client->shippingAddressList()->remove($shippingAddress);
@@ -101,12 +103,20 @@ class ClientService
      * @param ClientId $clientId
      * @return Client
      */
-    private function findClient(ClientId $clientId): Client
+    public function findClient(ClientId $clientId): Client
     {
         if (!$client = $this->clientRepository->findById($clientId)) {
             throw new ClientNotFoundException('client_service.client_not_found');
         }
         return $client;
+    }
+
+    /**
+     * @return Client[]
+     */
+    public function listClients()
+    {
+        return $this->clientRepository->list();
     }
 
     /**
