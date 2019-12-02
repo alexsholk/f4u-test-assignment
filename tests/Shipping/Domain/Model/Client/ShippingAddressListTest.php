@@ -65,6 +65,10 @@ class ShippingAddressListTest extends TestCase
         $list->remove($shippingAddress1);
         $this->assertCount(1, $list->all());
         $this->assertSame($shippingAddress2, $list->default());
+
+        $list->clear();
+        $this->assertCount(0, $list->all());
+        $this->assertNull($list->default());
     }
 
     private function shippingAddresses()

@@ -34,6 +34,16 @@ class Client
         return $this->fullName;
     }
 
+    public function changeFirstName(string $firstName)
+    {
+        $this->fullName = FullName::create($firstName, $this->fullName()->lastName());
+    }
+
+    public function changeLastName(string $lastName)
+    {
+        $this->fullName = FullName::create($this->fullName()->firstName(), $lastName);
+    }
+
     public function shippingAddressList(): ShippingAddressList
     {
         return $this->shippingAddressList;

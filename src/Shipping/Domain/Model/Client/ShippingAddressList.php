@@ -27,6 +27,12 @@ class ShippingAddressList
         // Deny clone
     }
 
+    public function clear()
+    {
+        $this->list    = [];
+        $this->default = null;
+    }
+
     public function add(ShippingAddress $shippingAddress)
     {
         if (count($this->list) >= $this->maxCount) {
